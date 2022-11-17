@@ -1,0 +1,16 @@
+using Microsoft.EntityFrameworkCore;
+namespace FinalProject.Models;
+
+public class OlympicAthleteContext : DbContext
+{
+    public OlympicAthleteContext(DbContextOptions<OlympicAthleteContext> options) : base(options) {}
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<OlympicAthlete>().HasData(
+            new OlympicAthlete {Id = 1, AthleteName = "Usain Bolt", Country = "Jamaica", NotSupportedException = "Track & Field", MedalsWon = 8}
+        );
+    }
+    
+    public DbSet<OlympicAthlete>? OlympicAthletes { get; set; }
+}

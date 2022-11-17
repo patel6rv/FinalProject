@@ -1,0 +1,16 @@
+using Microsoft.EntityFrameworkCore;
+namespace FinalProject.Models;
+
+public class CollegeStudentContext : DbContext
+{
+    public CollegeStudentContext(DbContextOptions<CollegeStudentContext> options) : base(options) {}
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<CollegeStudent>().HasData(
+            new CollegeStudent {Id = 1, FullName = "Walter White", Birthdate = new DateTime(1958, 9, 7), CollegeProgram = "IT", YearInProgram = "Freshman"}
+        );
+    }
+
+    public DbSet<CollegeStudent>? CollegeStudents { get; set;}
+}
