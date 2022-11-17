@@ -46,7 +46,7 @@ public class OlympicAthleteController : ControllerBase
     [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(string), StatusCodes.Status500InternalServerError)]
-    public IActionResult Add(FootballTeam teamToAdd)
+    public IActionResult Add(OlympicAthlete athleteToAdd)
     {
         return Ok();
     }
@@ -56,7 +56,7 @@ public class OlympicAthleteController : ControllerBase
     [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(string), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(string), StatusCodes.Status500InternalServerError)]
-    public IActionResult Put(FootballTeam teamToEdit)
+    public IActionResult Put(OlympicAthlete athleteToEdit)
     {
         return Ok();
     }

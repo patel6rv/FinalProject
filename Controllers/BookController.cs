@@ -4,18 +4,18 @@ namespace FinalProject.Controllers;
 
 [ApiController]
 [Route("[controller]")]
-public class CollegeStudentController : ControllerBase
+public class BookController : ControllerBase
 {
     private readonly ILogger<CollegeStudentController> _logger;
 
-    public CollegeStudentController(ILogger<CollegeStudentController> logger)
+    public BookController(ILogger<BookController> logger)
     {
         _logger = logger;
     }
 
     [HttpGet]
     [Route("ById")]
-    [ProducesResponseType(typeof(CollegeStudent), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(Book), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(string), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(string), StatusCodes.Status500InternalServerError)]
     public IActionResult GetById(int id)
@@ -25,7 +25,7 @@ public class CollegeStudentController : ControllerBase
 
     [HttpGet]
     [Route("All")]
-    [ProducesResponseType(typeof(List<CollegeStudent>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(List<Book>), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(string), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(string), StatusCodes.Status500InternalServerError)]
     public IActionResult GetAll()
@@ -46,7 +46,7 @@ public class CollegeStudentController : ControllerBase
     [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(string), StatusCodes.Status500InternalServerError)]
-    public IActionResult Add(CollegeStudent studentToAdd)
+    public IActionResult Add(Book bookToAdd)
     {
         return Ok();
     }
@@ -56,7 +56,7 @@ public class CollegeStudentController : ControllerBase
     [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(string), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(string), StatusCodes.Status500InternalServerError)]
-    public IActionResult Put(CollegeStudent studentToEdit)
+    public IActionResult Put(Book bookToEdit)
     {
         return Ok();
     }
