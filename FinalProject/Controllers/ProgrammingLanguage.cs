@@ -25,18 +25,18 @@ public class ProgrammingLanguageController : ControllerBase
     {
         if (id == null || id == 0) return Ok(_context.ProgrammingLanguages?.ToList().Take(5));
          try
+        {
+            var  language= _context.ProgrammingLanguages?.Find(id);
+            if (language == null)
             {
-                var  language= _context.ProgrammingLanguages?.Find(id);
-                if (language == null)
-                {
-                    return NotFound("The requested resource was not found");
-                }
-                return Ok(language);
+                return NotFound("The requested resource was not found");
             }
-            catch (Exception e)
-            {
-                return Problem(e.Message);
-            }
+            return Ok(language);
+        }
+        catch (Exception e)
+        {
+            return Problem(e.Message);
+        }
     }
 
     [HttpGet]
@@ -47,15 +47,15 @@ public class ProgrammingLanguageController : ControllerBase
     public IActionResult GetAll()
     {
         try
-            {
-                if (_context.ProgrammingLanguages == null || !_context.ProgrammingLanguages.Any())
-                    return NotFound("No ProgrammingLanguages found in the database");
-                return Ok(_context.ProgrammingLanguages?.ToList());
-            }
-            catch (Exception e)
-            {
-                return Problem(e.Message);
-            }
+        {
+            if (_context.ProgrammingLanguages == null || !_context.ProgrammingLanguages.Any())
+                return NotFound("No ProgrammingLanguages found in the database");
+            return Ok(_context.ProgrammingLanguages?.ToList());
+        }
+        catch (Exception e)
+        {
+            return Problem(e.Message);
+        }
     }
 
     [HttpDelete]
@@ -65,25 +65,25 @@ public class ProgrammingLanguageController : ControllerBase
     public IActionResult Delete(int id)
     {
         try
+        {
+            var language = _context.ProgrammingLanguages?.Find(id);
+            if (language == null)
             {
-                var language = _context.ProgrammingLanguages?.Find(id);
-                if (language == null)
-                {
-                    return NotFound($"ProgrammingLanguage with id {id} was not found");
-                }
+                return NotFound($"ProgrammingLanguage with id {id} was not found");
+            }
 
-                _context.ProgrammingLanguages?.Remove(language);
-                var result = _context.SaveChanges();
-                if (result >= 1)
-                {
-                    return Ok("Delete operation was successful");
-                }
-                return Problem("Delete was not successful. Please try again");
-            }
-            catch (Exception e)
+            _context.ProgrammingLanguages?.Remove(language);
+            var result = _context.SaveChanges();
+            if (result >= 1)
             {
-                return Problem(e.Message);
+                return Ok("Delete operation was successful");
             }
+            return Problem("Delete was not successful. Please try again");
+        }
+        catch (Exception e)
+        {
+            return Problem(e.Message);
+        }
     }
 
     [HttpPost]
@@ -92,24 +92,24 @@ public class ProgrammingLanguageController : ControllerBase
     [ProducesResponseType(typeof(string), StatusCodes.Status500InternalServerError)]
     public IActionResult Add(ProgrammingLanguage languageToAdd)
     {
-            if (languageToAdd.Id != 0)
+        if (languageToAdd.Id != 0)
+        {
+            return BadRequest("Id was provided but not needed");
+        }
+        try
+        {
+            _context.ProgrammingLanguages?.Add(languageToAdd);
+            var result = _context.SaveChanges();
+            if (result >= 1)
             {
-                return BadRequest("Id was provided but not needed");
+                return Ok($"ProgrammingLanguage {languageToAdd.Name} added successfully");
             }
-            try
-            {
-                _context.ProgrammingLanguages?.Add(languageToAdd);
-                var result = _context.SaveChanges();
-                if (result >= 1)
-                {
-                    return Ok($"ProgrammingLanguage {languageToAdd.Name} added successfully");
-                }
-                return Problem("Add was not successful. Please try again");
-            }
-            catch (Exception e)
-            {
-                return Problem(e.Message);
-            }
+            return Problem("Add was not successful. Please try again");
+        }
+        catch (Exception e)
+        {
+            return Problem(e.Message);
+        }
     }
 
     [HttpPut]
@@ -120,33 +120,33 @@ public class ProgrammingLanguageController : ControllerBase
     public IActionResult Put(ProgrammingLanguage languageToEdit)
     {
         if (languageToEdit.Id < 1)
-            {
-                return BadRequest("Please provide a valid id");
-            }
+        {
+            return BadRequest("Please provide a valid id");
+        }
 
-            try
-            {
-                var language = _context.ProgrammingLanguages?.Find(languageToEdit.Id);
-                if (language == null)
-                    return NotFound("The ProgrammingLanguage was not found");
+        try
+        {
+            var language = _context.ProgrammingLanguages?.Find(languageToEdit.Id);
+            if (language == null)
+                return NotFound("The ProgrammingLanguage was not found");
 
-                language.Name = languageToEdit.Name;
-                language.Typed = languageToEdit.Typed;
-                language.Execution = languageToEdit.Execution;
-                language.Paradigm = languageToEdit.Paradigm;
+            language.Name = languageToEdit.Name;
+            language.Typed = languageToEdit.Typed;
+            language.Execution = languageToEdit.Execution;
+            language.Paradigm = languageToEdit.Paradigm;
 
-                _context.ProgrammingLanguages?.Update(language);
-                var result = _context.SaveChanges();
-                if (result >= 1)
-                {
-                    return Ok("language edited successfully");
-                }
-                return Problem("Edit was not successful. Please try again");
-            }
-            catch (Exception e)
+            _context.ProgrammingLanguages?.Update(language);
+            var result = _context.SaveChanges();
+            if (result >= 1)
             {
-                return Problem(e.Message);
+                return Ok("language edited successfully");
             }
+            return Problem("Edit was not successful. Please try again");
+        }
+        catch (Exception e)
+        {
+            return Problem(e.Message);
+        }
     
     }
 }

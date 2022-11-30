@@ -26,18 +26,18 @@ public class BookController : ControllerBase
 
         if (id == null || id == 0) return Ok(_context.Books?.ToList().Take(5));
         try
+        {
+            var book = _context.Books?.Find(id);
+            if (book == null)
             {
-                var book = _context.Books?.Find(id);
-                if (book == null)
-                {
-                    return NotFound("The requested resource was not found");
-                }
-                return Ok(book);
+                return NotFound("The requested resource was not found");
             }
-            catch (Exception e)
-            {
-                return Problem(e.Message);
-            }
+            return Ok(book);
+        }
+        catch (Exception e)
+        {
+            return Problem(e.Message);
+        }
     }
 
     [HttpGet]
@@ -48,15 +48,15 @@ public class BookController : ControllerBase
     public IActionResult GetAll()
     {
         try
-            {
-                if (_context.Books == null || !_context.Books.Any())
-                    return NotFound("No Books found in the database");
-                return Ok(_context.Books?.ToList());
-            }
-            catch (Exception e)
-            {
-                return Problem(e.Message);
-            }
+        {
+            if (_context.Books == null || !_context.Books.Any())
+                return NotFound("No Books found in the database");
+            return Ok(_context.Books?.ToList());
+        }
+        catch (Exception e)
+        {
+            return Problem(e.Message);
+        }
     }
 
     [HttpDelete]
@@ -66,25 +66,25 @@ public class BookController : ControllerBase
     public IActionResult Delete(int id)
     {
         try
+        {
+            var book = _context.Books?.Find(id);
+            if (book == null)
             {
-                var book = _context.Books?.Find(id);
-                if (book == null)
-                {
-                    return NotFound($"Book with id {id} was not found");
-                }
+                return NotFound($"Book with id {id} was not found");
+            }
 
-                _context.Books?.Remove(book);
-                var result = _context.SaveChanges();
-                if (result >= 1)
-                {
-                    return Ok("Delete operation was successful");
-                }
-                return Problem("Delete was not successful. Please try again");
-            }
-            catch (Exception e)
+            _context.Books?.Remove(book);
+            var result = _context.SaveChanges();
+            if (result >= 1)
             {
-                return Problem(e.Message);
+                return Ok("Delete operation was successful");
             }
+            return Problem("Delete was not successful. Please try again");
+        }
+        catch (Exception e)
+        {
+            return Problem(e.Message);
+        }
     }
 
     [HttpPost]
@@ -93,24 +93,24 @@ public class BookController : ControllerBase
     [ProducesResponseType(typeof(string), StatusCodes.Status500InternalServerError)]
     public IActionResult Add(Book bookToAdd)
     {
-            if (bookToAdd.Id != 0)
+        if (bookToAdd.Id != 0)
+        {
+            return BadRequest("Id was provided but not needed");
+        }
+        try
+        {
+            _context.Books?.Add(bookToAdd);
+            var result = _context.SaveChanges();
+            if (result >= 1)
             {
-                return BadRequest("Id was provided but not needed");
+                return Ok($"Book {bookToAdd.Title} added successfully");
             }
-            try
-            {
-                _context.Books?.Add(bookToAdd);
-                var result = _context.SaveChanges();
-                if (result >= 1)
-                {
-                    return Ok($"Book {bookToAdd.Title} added successfully");
-                }
-                return Problem("Add was not successful. Please try again");
-            }
-            catch (Exception e)
-            {
-                return Problem(e.Message);
-            }
+            return Problem("Add was not successful. Please try again");
+        }
+        catch (Exception e)
+        {
+            return Problem(e.Message);
+        }
     }
 
     [HttpPut]

@@ -25,18 +25,18 @@ public class OlympicAthleteController : ControllerBase
     {
         if (id == null || id == 0) return Ok(_context.OlympicAthletes?.ToList().Take(5));
         try
+        {
+            var athlete = _context.OlympicAthletes?.Find(id);
+            if (athlete == null)
             {
-                var athlete = _context.OlympicAthletes?.Find(id);
-                if (athlete == null)
-                {
-                    return NotFound("The requested resource was not found");
-                }
-                return Ok(athlete);
+                return NotFound("The requested resource was not found");
             }
-            catch (Exception e)
-            {
-                return Problem(e.Message);
-            }
+            return Ok(athlete);
+        }
+        catch (Exception e)
+        {
+            return Problem(e.Message);
+        }
     }
 
     [HttpGet]
@@ -47,15 +47,15 @@ public class OlympicAthleteController : ControllerBase
     public IActionResult GetAll()
     {
         try
-            {
-                if (_context.OlympicAthletes == null || !_context.OlympicAthletes.Any())
-                    return NotFound("No OlympicAthletes found in the database");
-                return Ok(_context.OlympicAthletes?.ToList());
-            }
-            catch (Exception e)
-            {
-                return Problem(e.Message);
-            }
+        {
+            if (_context.OlympicAthletes == null || !_context.OlympicAthletes.Any())
+                return NotFound("No OlympicAthletes found in the database");
+            return Ok(_context.OlympicAthletes?.ToList());
+        }
+        catch (Exception e)
+        {
+            return Problem(e.Message);
+        }
     }
 
     [HttpDelete]
@@ -65,25 +65,25 @@ public class OlympicAthleteController : ControllerBase
     public IActionResult Delete(int id)
     {
         try
+        {
+            var athlete = _context.OlympicAthletes?.Find(id);
+            if (athlete == null)
             {
-                var athlete = _context.OlympicAthletes?.Find(id);
-                if (athlete == null)
-                {
-                    return NotFound($"OlympicAthlete with id {id} was not found");
-                }
+                return NotFound($"OlympicAthlete with id {id} was not found");
+            }
 
-                _context.OlympicAthletes?.Remove(athlete);
-                var result = _context.SaveChanges();
-                if (result >= 1)
-                {
-                    return Ok("Delete operation was successful");
-                }
-                return Problem("Delete was not successful. Please try again");
-            }
-            catch (Exception e)
+            _context.OlympicAthletes?.Remove(athlete);
+            var result = _context.SaveChanges();
+            if (result >= 1)
             {
-                return Problem(e.Message);
+                return Ok("Delete operation was successful");
             }
+            return Problem("Delete was not successful. Please try again");
+        }
+        catch (Exception e)
+        {
+            return Problem(e.Message);
+        }
     }
 
     [HttpPost]
