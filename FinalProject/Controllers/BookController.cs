@@ -50,7 +50,7 @@ public class BookController : ControllerBase
         try
             {
                 if (_context.Books == null || !_context.Books.Any())
-                    return NotFound("No ToDos found in the database");
+                    return NotFound("No Books found in the database");
                 return Ok(_context.Books?.ToList());
             }
             catch (Exception e)
